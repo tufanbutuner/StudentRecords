@@ -1,12 +1,10 @@
-﻿namespace StudentRecords.API.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace StudentRecords.API.Models
 {
     public class Modules
     {
-        public int ModulesId { get; set; }
-
-        public string ModulesName { get; set; } = string.Empty;
-
-        public GradeEnum Grade { get; set; } = GradeEnum.F;
+        public Module[] Module { get; set; } = null!;
 
     }
 }

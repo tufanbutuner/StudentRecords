@@ -9,7 +9,9 @@ namespace StudentRecords.API.Data
         DbSet<Student> Students { get; }
         DbSet<Degree> Degrees { get; }
         DbSet<Modules> Modules { get; }
+        DbSet<Module> Module { get; }
         DbSet<Address> Address { get; }
+
         EntityEntry Attach(object entity);
         EntityEntry Entry(object entity);
 
