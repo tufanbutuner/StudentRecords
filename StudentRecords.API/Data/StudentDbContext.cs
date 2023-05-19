@@ -6,14 +6,12 @@ namespace StudentRecords.API.Data
 {
     public class StudentDbContext : DbContext, IDbContext
     {
-
         public StudentDbContext(DbContextOptions<StudentDbContext> options) : base(options)
         {
 
         }
         public DbSet<Student> Students => Set<Student>();
-        public DbSet<Degree> Degrees => Set<Degree>();
-        public DbSet<Modules> Modules => Set<Modules>();
+        public DbSet<Degree> Degree => Set<Degree>();
         public DbSet<Module> Module => Set<Module>();
         public DbSet<Address> Address => Set<Address>();
 
@@ -32,8 +30,10 @@ namespace StudentRecords.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Modules>()
-                .HasNoKey();
+            modelBuilder.Entity<Degree>()
+                .HasMany(d => d.Modules)
+                .WithOne(m => m.Degree)
+                .HasForeignKey(m => m.DegreeId);
         }
     }
 }

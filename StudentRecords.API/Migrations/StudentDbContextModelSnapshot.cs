@@ -51,7 +51,7 @@ namespace StudentRecords.API.Migrations
 
                     b.HasKey("AddressId");
 
-                    b.ToTable("Address");
+                    b.ToTable("Address", (string)null);
                 });
 
             modelBuilder.Entity("StudentRecords.API.Models.Degree", b =>
@@ -75,41 +75,25 @@ namespace StudentRecords.API.Migrations
 
                     b.HasIndex("ModulesId");
 
-                    b.ToTable("Degrees");
-                });
-
-            modelBuilder.Entity("StudentRecords.API.Models.Module", b =>
-                {
-                    b.Property<int>("ModuleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("ModuleGrade")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ModuleName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("ModuleId");
-
-                    b.ToTable("Module");
+                    b.ToTable("Degrees", (string)null);
                 });
 
             modelBuilder.Entity("StudentRecords.API.Models.Modules", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ModulesId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("ModuleId")
+                    b.Property<int>("Grade")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<string>("ModulesName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
-                    b.HasIndex("ModuleId");
+                    b.HasKey("ModulesId");
 
-                    b.ToTable("Modules");
+                    b.ToTable("Modules", (string)null);
                 });
 
             modelBuilder.Entity("StudentRecords.API.Models.Student", b =>
@@ -137,7 +121,7 @@ namespace StudentRecords.API.Migrations
 
                     b.HasIndex("DegreeId");
 
-                    b.ToTable("Students");
+                    b.ToTable("Students", (string)null);
                 });
 
             modelBuilder.Entity("StudentRecords.API.Models.Degree", b =>
@@ -149,17 +133,6 @@ namespace StudentRecords.API.Migrations
                         .IsRequired();
 
                     b.Navigation("Modules");
-                });
-
-            modelBuilder.Entity("StudentRecords.API.Models.Modules", b =>
-                {
-                    b.HasOne("StudentRecords.API.Models.Module", "Module")
-                        .WithMany()
-                        .HasForeignKey("ModuleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Module");
                 });
 
             modelBuilder.Entity("StudentRecords.API.Models.Student", b =>
