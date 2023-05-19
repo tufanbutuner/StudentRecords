@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentRecords.API.Data;
 
@@ -10,9 +11,11 @@ using StudentRecords.API.Data;
 namespace StudentRecords.API.Migrations
 {
     [DbContext(typeof(StudentDbContext))]
-    partial class StudentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230519124211_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,7 +54,7 @@ namespace StudentRecords.API.Migrations
 
                     b.HasKey("AddressId");
 
-                    b.ToTable("Address", (string)null);
+                    b.ToTable("Address");
                 });
 
             modelBuilder.Entity("StudentRecords.API.Models.Degree", b =>
@@ -68,32 +71,32 @@ namespace StudentRecords.API.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("ModulesId")
-                        .HasColumnType("int");
-
                     b.HasKey("DegreeId");
 
-                    b.HasIndex("ModulesId");
-
-                    b.ToTable("Degrees", (string)null);
+                    b.ToTable("Degree");
                 });
 
-            modelBuilder.Entity("StudentRecords.API.Models.Modules", b =>
+            modelBuilder.Entity("StudentRecords.API.Models.Module", b =>
                 {
-                    b.Property<int>("ModulesId")
+                    b.Property<int>("ModuleId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("Grade")
+                    b.Property<int>("DegreeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ModulesName")
+                    b.Property<int>("ModuleGrade")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModuleName")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.HasKey("ModulesId");
+                    b.HasKey("ModuleId");
 
-                    b.ToTable("Modules", (string)null);
+                    b.HasIndex("DegreeId");
+
+                    b.ToTable("Module");
                 });
 
             modelBuilder.Entity("StudentRecords.API.Models.Student", b =>
@@ -111,6 +114,9 @@ namespace StudentRecords.API.Migrations
                     b.Property<int>("DegreeId")
                         .HasColumnType("int");
 
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -121,18 +127,20 @@ namespace StudentRecords.API.Migrations
 
                     b.HasIndex("DegreeId");
 
-                    b.ToTable("Students", (string)null);
+                    b.HasIndex("ModuleId");
+
+                    b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("StudentRecords.API.Models.Degree", b =>
+            modelBuilder.Entity("StudentRecords.API.Models.Module", b =>
                 {
-                    b.HasOne("StudentRecords.API.Models.Modules", "Modules")
-                        .WithMany()
-                        .HasForeignKey("ModulesId")
+                    b.HasOne("StudentRecords.API.Models.Degree", "Degree")
+                        .WithMany("Modules")
+                        .HasForeignKey("DegreeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Modules");
+                    b.Navigation("Degree");
                 });
 
             modelBuilder.Entity("StudentRecords.API.Models.Student", b =>
@@ -149,9 +157,22 @@ namespace StudentRecords.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("StudentRecords.API.Models.Module", "Module")
+                        .WithMany()
+                        .HasForeignKey("ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Address");
 
                     b.Navigation("Degree");
+
+                    b.Navigation("Module");
+                });
+
+            modelBuilder.Entity("StudentRecords.API.Models.Degree", b =>
+                {
+                    b.Navigation("Modules");
                 });
 #pragma warning restore 612, 618
         }

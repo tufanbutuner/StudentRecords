@@ -10,7 +10,6 @@ namespace StudentRecords.API.Data
         DbSet<Degree> Degree { get; }
         DbSet<Module> Module { get; }
         DbSet<Address> Address { get; }
-
         EntityEntry Attach(object entity);
         EntityEntry Entry(object entity);
 
