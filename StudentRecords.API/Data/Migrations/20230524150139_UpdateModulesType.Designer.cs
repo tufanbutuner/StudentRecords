@@ -11,8 +11,8 @@ using StudentRecords.API.Data;
 namespace StudentRecords.API.Migrations
 {
     [DbContext(typeof(StudentDbContext))]
-    [Migration("20230517152957_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230524150139_UpdateModulesType")]
+    partial class UpdateModulesType
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,32 +71,32 @@ namespace StudentRecords.API.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("ModulesId")
-                        .HasColumnType("int");
-
                     b.HasKey("DegreeId");
 
-                    b.HasIndex("ModulesId");
-
-                    b.ToTable("Degrees");
+                    b.ToTable("Degree");
                 });
 
-            modelBuilder.Entity("StudentRecords.API.Models.Modules", b =>
+            modelBuilder.Entity("StudentRecords.API.Models.Module", b =>
                 {
-                    b.Property<int>("ModulesId")
+                    b.Property<int>("ModuleId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("Grade")
+                    b.Property<int>("DegreeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ModulesName")
+                    b.Property<int>("ModuleGrade")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModuleName")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.HasKey("ModulesId");
+                    b.HasKey("ModuleId");
 
-                    b.ToTable("Modules");
+                    b.HasIndex("DegreeId");
+
+                    b.ToTable("Module");
                 });
 
             modelBuilder.Entity("StudentRecords.API.Models.Student", b =>
@@ -127,15 +127,15 @@ namespace StudentRecords.API.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("StudentRecords.API.Models.Degree", b =>
+            modelBuilder.Entity("StudentRecords.API.Models.Module", b =>
                 {
-                    b.HasOne("StudentRecords.API.Models.Modules", "Modules")
-                        .WithMany()
-                        .HasForeignKey("ModulesId")
+                    b.HasOne("StudentRecords.API.Models.Degree", "Degree")
+                        .WithMany("Modules")
+                        .HasForeignKey("DegreeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Modules");
+                    b.Navigation("Degree");
                 });
 
             modelBuilder.Entity("StudentRecords.API.Models.Student", b =>
@@ -155,6 +155,11 @@ namespace StudentRecords.API.Migrations
                     b.Navigation("Address");
 
                     b.Navigation("Degree");
+                });
+
+            modelBuilder.Entity("StudentRecords.API.Models.Degree", b =>
+                {
+                    b.Navigation("Modules");
                 });
 #pragma warning restore 612, 618
         }

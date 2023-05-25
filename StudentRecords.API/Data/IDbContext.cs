@@ -7,12 +7,11 @@ namespace StudentRecords.API.Data
     public interface IDbContext
     {
         DbSet<Student> Students { get; }
-        DbSet<Degree> Degrees { get; }
-        DbSet<Modules> Modules { get; }
+        DbSet<Degree> Degree { get; }
+        DbSet<Module> Module { get; }
         DbSet<Address> Address { get; }
         EntityEntry Attach(object entity);
         EntityEntry Entry(object entity);
-
         Task SaveChangesAsync();
     }
 }

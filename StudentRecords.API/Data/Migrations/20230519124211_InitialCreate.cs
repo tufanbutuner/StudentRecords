@@ -41,23 +41,7 @@ namespace StudentRecords.API.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Modules",
-                columns: table => new
-                {
-                    ModulesId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ModulesName = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Grade = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Modules", x => x.ModulesId);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Degrees",
+                name: "Degree",
                 columns: table => new
                 {
                     DegreeId = table.Column<int>(type: "int", nullable: false)
@@ -65,17 +49,33 @@ namespace StudentRecords.API.Migrations
                     DegreeName = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DegreeDescription = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ModulesId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Degrees", x => x.DegreeId);
+                    table.PrimaryKey("PK_Degree", x => x.DegreeId);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Module",
+                columns: table => new
+                {
+                    ModuleId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ModuleName = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ModuleGrade = table.Column<int>(type: "int", nullable: false),
+                    DegreeId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Module", x => x.ModuleId);
                     table.ForeignKey(
-                        name: "FK_Degrees_Modules_ModulesId",
-                        column: x => x.ModulesId,
-                        principalTable: "Modules",
-                        principalColumn: "ModulesId",
+                        name: "FK_Module_Degree_DegreeId",
+                        column: x => x.DegreeId,
+                        principalTable: "Degree",
+                        principalColumn: "DegreeId",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -90,7 +90,8 @@ namespace StudentRecords.API.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     AddressId = table.Column<int>(type: "int", nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    DegreeId = table.Column<int>(type: "int", nullable: false)
+                    DegreeId = table.Column<int>(type: "int", nullable: false),
+                    ModuleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -102,18 +103,24 @@ namespace StudentRecords.API.Migrations
                         principalColumn: "AddressId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Students_Degrees_DegreeId",
+                        name: "FK_Students_Degree_DegreeId",
                         column: x => x.DegreeId,
-                        principalTable: "Degrees",
+                        principalTable: "Degree",
                         principalColumn: "DegreeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Students_Module_ModuleId",
+                        column: x => x.ModuleId,
+                        principalTable: "Module",
+                        principalColumn: "ModuleId",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Degrees_ModulesId",
-                table: "Degrees",
-                column: "ModulesId");
+                name: "IX_Module_DegreeId",
+                table: "Module",
+                column: "DegreeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Students_AddressId",
@@ -124,6 +131,11 @@ namespace StudentRecords.API.Migrations
                 name: "IX_Students_DegreeId",
                 table: "Students",
                 column: "DegreeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Students_ModuleId",
+                table: "Students",
+                column: "ModuleId");
         }
 
         /// <inheritdoc />
@@ -136,10 +148,10 @@ namespace StudentRecords.API.Migrations
                 name: "Address");
 
             migrationBuilder.DropTable(
-                name: "Degrees");
+                name: "Module");
 
             migrationBuilder.DropTable(
-                name: "Modules");
+                name: "Degree");
         }
     }
 }
