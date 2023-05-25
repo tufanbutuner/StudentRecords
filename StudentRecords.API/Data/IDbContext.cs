@@ -12,7 +12,6 @@ namespace StudentRecords.API.Data
         DbSet<Address> Address { get; }
         EntityEntry Attach(object entity);
         EntityEntry Entry(object entity);
-
         Task SaveChangesAsync();
     }
 }

@@ -30,10 +30,12 @@ namespace StudentRecords.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Degree>()
-                .HasMany(d => d.Modules)
-                .WithOne(m => m.Degree)
-                .HasForeignKey(m => m.DegreeId);
+
+            modelBuilder.Entity<Module>()
+        .HasOne(m => m.Degree)
+        .WithMany(d => d.Modules)
+        .HasForeignKey(m => m.DegreeId);
+
         }
     }
 }

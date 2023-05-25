@@ -7,6 +7,5 @@
         public Address Address { get; set; } = null!;
         public DateTime DateOfBirth { get; set; }
         public Degree Degree { get; set; } = null!;
-        public Module Module { get; set; } = null!;
     }
 }
